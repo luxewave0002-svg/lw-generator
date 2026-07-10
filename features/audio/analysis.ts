@@ -75,3 +75,44 @@ export function createBandSampler(): () => Bands {
     return out;
   };
 }
+
+export interface BandLevels {
+  levels: Float32Array;
+  active: boolean;
+}
+
+/**
+ * N log-spaced band levels (40Hz - 8kHz) for the ribbon visual.
+ * Allocation-free; the same Float32Array is reused every frame.
+ */
+export function createBandLevelSampler(count: number): () => BandLevels {
+  let freq: Uint8Array<ArrayBuffer> | null = null;
+  const res: BandLevels = { levels: new Float32Array(count), active: false };
+  const F0 = 40;
+  const F1 = 8000;
+
+  return function sample(): BandLevels {
+    const engine = getAudioEngine();
+    const analyser = engine.getAnalyser();
+    if (!analyser) {
+      res.active = false;
+      return res;
+    }
+    const n = analyser.frequencyBinCount;
+    if (!freq || freq.length !== n) freq = new Uint8Array(n);
+    analyser.getByteFrequencyData(freq);
+    const hzPerBin = engine.getSampleRate() / 2 / n;
+
+    for (let i = 0; i < count; i++) {
+      const lo = F0 * Math.pow(F1 / F0, i / count);
+      const hi = F0 * Math.pow(F1 / F0, (i + 1) / count);
+      const a = Math.max(0, Math.floor(lo / hzPerBin));
+      const b = Math.min(n - 1, Math.max(a, Math.ceil(hi / hzPerBin)));
+      let s = 0;
+      for (let k = a; k <= b; k++) s += freq[k];
+      res.levels[i] = Math.pow(s / (b - a + 1) / 255, 0.9);
+    }
+    res.active = true;
+    return res;
+  };
+}

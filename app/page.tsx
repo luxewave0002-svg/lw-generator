@@ -1,6 +1,7 @@
 import Header from "@/components/layout/Header";
 import AppShell from "@/components/layout/AppShell";
 import AudioBridge from "@/features/audio/AudioBridge";
+import SolfeggioDetector from "@/features/solfeggio/SolfeggioDetector";
 import SourceBar from "@/components/layout/SourceBar";
 import VisualStage from "@/features/visual/renderer/VisualStage";
 import ModeSwitch from "@/components/layout/ModeSwitch";
@@ -13,6 +14,7 @@ export default function Home() {
   return (
     <AppShell>
       <AudioBridge />
+      <SolfeggioDetector />
       <div className="mx-auto flex min-h-dvh max-w-lg flex-col lg:max-w-5xl">
         <Header />
         <SourceBar />

@@ -4,6 +4,7 @@ import { useAnalyzerStore } from "@/stores/analyzerStore";
 import type { AnalyzerTab } from "@/types";
 import SpectrumView from "@/features/fft/SpectrumView";
 import WaveformView from "@/features/fft/WaveformView";
+import TimelineView from "@/features/fft/TimelineView";
 
 const TABS: { id: AnalyzerTab; label: string }[] = [
   { id: "spectrum", label: "SPECTRUM" },
@@ -37,18 +38,8 @@ export default function AnalyzerPanel() {
       <div className="mt-3 h-36">
         {tab === "spectrum" && <SpectrumView />}
         {tab === "waveform" && <WaveformView />}
-        {tab === "timeline" && (
-          <Placeholder label="Detection timeline arrives with the Solfeggio detector (Phase 7)." />
-        )}
+        {tab === "timeline" && <TimelineView />}
       </div>
     </section>
-  );
-}
-
-function Placeholder({ label }: { label: string }) {
-  return (
-    <div className="flex h-full items-center justify-center text-xs text-lw-muted">
-      {label}
-    </div>
   );
 }

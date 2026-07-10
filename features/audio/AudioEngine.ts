@@ -156,6 +156,13 @@ export class AudioEngine {
     return this.analyser;
   }
 
+  /** Fill target with float time-domain samples (Phase 7 detector). */
+  getFloatTimeDomain(target: Float32Array<ArrayBuffer>): boolean {
+    if (!this.analyser) return false;
+    this.analyser.getFloatTimeDomainData(target);
+    return true;
+  }
+
   getSampleRate(): number {
     return this.ctx?.sampleRate ?? 44100;
   }
