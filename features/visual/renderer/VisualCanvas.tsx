@@ -1,6 +1,8 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { useEffect } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { setCaptureHandle } from "@/features/visual/renderer/captureBus";
 import { useVisualStore } from "@/stores/visualStore";
 import FluidScene from "@/features/visual/fluid/FluidScene";
 import RibbonScene from "@/features/visual/ribbon/RibbonScene";
@@ -12,6 +14,16 @@ function SceneRouter() {
   return <FluidScene />;
 }
 
+/** Publishes the renderer/canvas to the capture bus for export. */
+function CaptureRegistrar() {
+  const gl = useThree((s) => s.gl);
+  useEffect(() => {
+    setCaptureHandle({ gl, canvas: gl.domElement });
+    return () => setCaptureHandle(null);
+  }, [gl]);
+  return null;
+}
+
 /** The single R3F renderer instance for the whole app. */
 export default function VisualCanvas() {
   return (
@@ -21,10 +33,12 @@ export default function VisualCanvas() {
       gl={{
         antialias: false,
         alpha: false,
+        preserveDrawingBuffer: true,
         powerPreference: "high-performance",
       }}
       style={{ position: "absolute", inset: 0 }}
     >
+      <CaptureRegistrar />
       <SceneRouter />
     </Canvas>
   );

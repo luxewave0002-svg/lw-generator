@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { fluidVert, fluidFrag } from "@/shaders/fluid";
 import { createBandSampler } from "@/features/audio/analysis";
+import { useVisualStore } from "@/stores/visualStore";
 
 /** baseline motion so the visual breathes before any audio plays */
 const IDLE = { level: 0.1, bass: 0.18, mid: 0.3, treble: 0.15, centroid: 0.35 };
@@ -25,6 +26,9 @@ export default function FluidScene({ variant = 0 }: { variant?: number }) {
       uTreble: { value: IDLE.treble },
       uCentroid: { value: IDLE.centroid },
       uVariant: { value: variant },
+      uIntensity: { value: 1 },
+      uSpeed: { value: 1 },
+      uGlow: { value: 0.5 },
     }),
     [variant],
   );
@@ -61,6 +65,11 @@ export default function FluidScene({ variant = 0 }: { variant?: number }) {
     m.uniforms.uMid.value = s.mid;
     m.uniforms.uTreble.value = s.treble;
     m.uniforms.uCentroid.value = s.centroid;
+
+    const p = useVisualStore.getState().params;
+    m.uniforms.uIntensity.value = p.intensity;
+    m.uniforms.uSpeed.value = p.speed;
+    m.uniforms.uGlow.value = p.glow;
   });
 
   return (

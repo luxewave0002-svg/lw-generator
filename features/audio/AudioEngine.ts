@@ -15,6 +15,7 @@ export class AudioEngine {
   private ctx: AudioContext | null = null;
   private analyser: AnalyserNode | null = null;
   private gain: GainNode | null = null;
+  private recDest: MediaStreamAudioDestinationNode | null = null;
 
   private buffer: AudioBuffer | null = null;
   private fileSource: AudioBufferSourceNode | null = null;
@@ -46,6 +47,9 @@ export class AudioEngine {
       this.gain = this.ctx.createGain();
       this.analyser.connect(this.gain);
       this.gain.connect(this.ctx.destination);
+      // parallel tap for recording (always carries signal, even for mic)
+      this.recDest = this.ctx.createMediaStreamDestination();
+      this.analyser.connect(this.recDest);
       this.applyVolume();
     }
     if (this.ctx.state === "suspended") void this.ctx.resume();
@@ -165,6 +169,11 @@ export class AudioEngine {
 
   getSampleRate(): number {
     return this.ctx?.sampleRate ?? 44100;
+  }
+
+  /** Audio track for video export (null before context init). */
+  getRecordingStream(): MediaStream | null {
+    return this.recDest?.stream ?? null;
   }
 }
 

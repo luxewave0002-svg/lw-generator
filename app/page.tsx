@@ -9,6 +9,8 @@ import AnalyzerPanel from "@/features/fft/AnalyzerPanel";
 import SolfeggioRow from "@/features/solfeggio/SolfeggioRow";
 import VolumeSlider from "@/components/layout/VolumeSlider";
 import BottomNav from "@/components/layout/BottomNav";
+import PresetsSheet from "@/features/presets/PresetsSheet";
+import ExportSheet from "@/features/export/ExportSheet";
 
 export default function Home() {
   return (
@@ -27,6 +29,8 @@ export default function Home() {
         </main>
         <BottomNav />
       </div>
+      <PresetsSheet />
+      <ExportSheet />
     </AppShell>
   );
 }

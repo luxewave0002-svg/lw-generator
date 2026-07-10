@@ -5,6 +5,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { ribbonVert, ribbonFrag } from "@/shaders/ribbon";
 import { createBandLevelSampler } from "@/features/audio/analysis";
+import { useVisualStore } from "@/stores/visualStore";
 
 const COUNT = 7;
 const SMOOTH = 0.16;
@@ -47,6 +48,7 @@ export default function RibbonScene() {
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
+    const params = useVisualStore.getState().params;
     const b = sampler();
     const s = smooth.current;
     let sum = 0;
@@ -60,8 +62,8 @@ export default function RibbonScene() {
       const m = mats.current[i];
       if (m) {
         m.uniforms.uTime.value = t;
-        m.uniforms.uAmp.value = s[i];
-        m.uniforms.uFlow.value = sum / COUNT;
+        m.uniforms.uAmp.value = s[i] * params.intensity;
+        m.uniforms.uFlow.value = (sum / COUNT) * params.speed;
       }
     }
 

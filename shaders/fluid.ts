@@ -21,7 +21,10 @@ uniform float uBass;
 uniform float uMid;
 uniform float uTreble;
 uniform float uCentroid;
-uniform float uVariant; // 0 = fluid, 1 = ribbon-ish (temporary, Phase 6)
+uniform float uVariant;
+uniform float uIntensity;
+uniform float uSpeed;
+uniform float uGlow;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -52,7 +55,7 @@ float fbm(vec2 p) {
 
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / min(uRes.x, uRes.y);
-  float t = uTime * (0.05 + 0.10 * uMid);
+  float t = uTime * (0.05 + 0.10 * uMid) * uSpeed;
 
   vec2 p = uv * (1.8 + 0.6 * uVariant);
 
@@ -78,9 +81,9 @@ void main() {
   vec3 cAcc  = vec3(1.0, 0.176, 0.667); // #FF2DAA
 
   vec3 col = mix(cCyan, cGlow, clamp(f * 1.5, 0.0, 1.0));
-  col = mix(col, cAcc, smoothstep(0.35, 0.95, q.y + uCentroid * 0.6));
+  col = mix(col, cAcc, smoothstep(0.35, 0.95, q.y + uCentroid * 0.6 + (uGlow - 0.5) * 0.9));
 
-  float energy = 0.25 + 1.6 * uLevel;
+  float energy = (0.25 + 1.6 * uLevel) * uIntensity;
   vec3 base  = col * (f * f) * 0.35 * energy;
   vec3 fl    = col * lines * (0.55 + 1.8 * uLevel);
 
