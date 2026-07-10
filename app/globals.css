@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+
+/* ============================================
+   LUXE WAVE Generator - Design Tokens
+   ============================================ */
+@theme {
+  /* Brand palette */
+  --color-lw-bg: #070b14;
+  --color-lw-surface: #0c1220;
+  --color-lw-surface-2: #111a2e;
+  --color-lw-primary: #00e5ff;
+  --color-lw-accent: #ff2daa;
+  --color-lw-glow: #7c4dff;
+  --color-lw-text: #e8eef8;
+  --color-lw-muted: #6b7a95;
+  --color-lw-line: rgba(0, 229, 255, 0.14);
+
+  /* Typography */
+  --font-sans: "Inter Variable", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  /* Motion */
+  --ease-lw: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ============================================
+   Base
+   ============================================ */
+html,
+body {
+  height: 100%;
+  background: var(--color-lw-bg);
+  color: var(--color-lw-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ============================================
+   Glassmorphism utilities
+   ============================================ */
+@utility glass {
+  background: linear-gradient(
+    160deg,
+    rgba(17, 26, 46, 0.72),
+    rgba(10, 15, 28, 0.55)
+  );
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--color-lw-line);
+  border-radius: 1.25rem;
+}
+
+@utility glass-pill {
+  background: rgba(12, 18, 32, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--color-lw-line);
+  border-radius: 9999px;
+}
+
+@utility neon-text {
+  color: var(--color-lw-primary);
+  text-shadow:
+    0 0 8px rgba(0, 229, 255, 0.6),
+    0 0 24px rgba(0, 229, 255, 0.3);
+}
+
+@utility neon-ring {
+  box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.35),
+    0 0 16px rgba(0, 229, 255, 0.25),
+    inset 0 0 12px rgba(0, 229, 255, 0.08);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
