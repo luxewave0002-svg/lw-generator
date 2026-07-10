@@ -3,6 +3,7 @@
 import { FiPause, FiPlay, FiStar, FiUpload } from "react-icons/fi";
 import { PiGauge, PiChartBar } from "react-icons/pi";
 import { useAudioStore } from "@/stores/audioStore";
+import { useAudioCommands } from "@/hooks/useAudioCommands";
 
 const LEFT = [
   { id: "visual", label: "VISUAL", Icon: PiGauge, active: true },
@@ -15,10 +16,16 @@ const RIGHT = [
 
 export default function BottomNav() {
   const playback = useAudioStore((s) => s.playback);
-  const setPlayback = useAudioStore((s) => s.setPlayback);
+  const hasFile = useAudioStore((s) => Boolean(s.fileName));
+  const { togglePlay } = useAudioCommands();
   const playing = playback === "playing";
 
-  const item = (id: string, label: string, Icon: typeof FiStar, active: boolean) => (
+  const item = (
+    id: string,
+    label: string,
+    Icon: typeof FiStar,
+    active: boolean,
+  ) => (
     <button
       key={id}
       className={`flex flex-col items-center gap-1 text-[10px] tracking-widest transition-colors ${
@@ -36,10 +43,15 @@ export default function BottomNav() {
         {LEFT.map((i) => item(i.id, i.label, i.Icon, i.active))}
         <button
           aria-label={playing ? "Pause" : "Play"}
-          onClick={() => setPlayback(playing ? "paused" : "playing")}
-          className="neon-ring -mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-lw-surface text-lw-primary transition-transform active:scale-95"
+          onClick={togglePlay}
+          disabled={!hasFile}
+          className="neon-ring -mt-6 flex h-16 w-16 items-center justify-center rounded-full bg-lw-surface text-lw-primary transition-transform active:scale-95 disabled:opacity-40"
         >
-          {playing ? <FiPause size={24} /> : <FiPlay size={24} className="ml-1" />}
+          {playing ? (
+            <FiPause size={24} />
+          ) : (
+            <FiPlay size={24} className="ml-1" />
+          )}
         </button>
         {RIGHT.map((i) => item(i.id, i.label, i.Icon, i.active))}
       </div>
