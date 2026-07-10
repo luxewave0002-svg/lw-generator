@@ -1,46 +1,25 @@
-import { SOLFEGGIO_FREQUENCIES } from "@/utils/constants";
+import Header from "@/components/layout/Header";
+import SourceBar from "@/components/layout/SourceBar";
+import VisualStage from "@/features/visual/renderer/VisualStage";
+import ModeSwitch from "@/components/layout/ModeSwitch";
+import AnalyzerPanel from "@/features/fft/AnalyzerPanel";
+import SolfeggioRow from "@/features/solfeggio/SolfeggioRow";
+import VolumeSlider from "@/components/layout/VolumeSlider";
+import BottomNav from "@/components/layout/BottomNav";
 
-/**
- * Phase 1 placeholder page.
- * Verifies design tokens, fonts and glass utilities render correctly.
- * Replaced by the full app shell in Phase 2.
- */
 export default function Home() {
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-8 p-6">
-      <header className="text-center">
-        <h1 className="text-4xl font-semibold tracking-[0.18em]">
-          <span className="neon-text">LUXE WAVE</span>
-        </h1>
-        <p className="mt-1 text-sm tracking-[0.5em] text-lw-muted">
-          GENERATOR
-        </p>
-        <div className="mx-auto mt-3 h-0.5 w-16 rounded-full bg-gradient-to-r from-lw-primary via-lw-glow to-lw-accent" />
-      </header>
-
-      <section className="glass w-full max-w-sm p-6">
-        <p className="text-xs uppercase tracking-widest text-lw-muted">
-          Phase 1 / Scaffold
-        </p>
-        <p className="mt-2 text-sm leading-relaxed">
-          Design tokens, stores and project structure are in place. Audio
-          engine and visuals arrive in the next phases.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {SOLFEGGIO_FREQUENCIES.map((hz) => (
-            <span
-              key={hz}
-              className="glass-pill px-3 py-1 font-mono text-xs text-lw-primary"
-            >
-              {hz}Hz
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <footer className="font-mono text-[11px] text-lw-muted">
-        #070B14 / #00E5FF / #FF2DAA / #7C4DFF
-      </footer>
-    </main>
+    <div className="mx-auto flex min-h-dvh max-w-lg flex-col lg:max-w-5xl">
+      <Header />
+      <SourceBar />
+      <main className="flex-1">
+        <VisualStage />
+        <ModeSwitch />
+        <AnalyzerPanel />
+        <SolfeggioRow />
+        <VolumeSlider />
+      </main>
+      <BottomNav />
+    </div>
   );
 }
